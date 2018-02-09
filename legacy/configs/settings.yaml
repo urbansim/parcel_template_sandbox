@@ -1,0 +1,7 @@
+store: sandag_subset.h5
+
+net_store: osm_sandag_subset.h5
+
+build_networks:
+  name: osm_sandag_subset.h5
+  max_distance: 1500
