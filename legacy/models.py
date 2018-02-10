@@ -1,6 +1,8 @@
 import orca
 import pandana as pdna
 
+from urbansim.utils import networks
+
 
 @orca.step('build_networks')
 def build_networks(parcels, net_store):
