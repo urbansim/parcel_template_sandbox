@@ -55,9 +55,10 @@ def households(store):
 
 @orca.table('buildings', cache=True)
 def buildings(store):
-    df = store['buildings']
-    df['res_price_per_sqft'] = 0.0
-    df['nonres_rent_per_sqft'] = 0.0
+    df = store['assessor_transactions']
+    df["index"] = df.index
+    df.drop_duplicates(subset='index', keep='last', inplace=True)
+    del df["index"]
     df.index.name = 'building_id'
     return df
 
@@ -90,6 +91,7 @@ def jobs(store):
 orca.broadcast('parcels', 'buildings', cast_index=True, onto_on='parcel_id')
 orca.broadcast('buildings', 'households', cast_index=True, onto_on='building_id')
 orca.broadcast('buildings', 'jobs', cast_index=True, onto_on='building_id')
+orca.broadcast('nodes', 'buildings', cast_index=True, onto_on='node_id')
 
 
 #####################

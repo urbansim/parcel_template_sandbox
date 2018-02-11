@@ -16,15 +16,6 @@ variable_definitions:
     decay: flat
     apply: np.log1p
 
-  - name: mean_nonres_rent_2000m
-    aggregation: average
-    dataframe: buildings
-    decay: flat
-    filters:
-    - non_residential_sqft > 0
-    radius: 2000
-    varname: nonres_rent_per_sqft
-
   - name: jobs_1500m
     dataframe: jobs
     radius: 1500
