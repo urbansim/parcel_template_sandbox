@@ -4,6 +4,7 @@ from datetime import datetime as dt
 
 import orca
 from urbansim.models import RegressionModel
+from urbansim.utils import yamlio
 
 
 class RegressionStep(object):
@@ -45,9 +46,17 @@ class RegressionStep(object):
     def __init__(self, model_expression, tables, fit_filters=None, out_fname=None,    
             predict_filters=None, ytransform=None, name=None, tags=[]):
         
-        # Parameters needed outside the constructor
+        self.model_expression = model_expression
         self.tables = tables
+        self.fit_filters = fit_filters
         self.out_fname = out_fname
+        self.predict_filters = predict_filters
+        self.ytransform = ytransform
+
+        # Placeholder for the RegressionModel object, created either in the fit() method
+        # or in the from_dict() class method
+        self.model = None
+        
         self.type = 'RegressionStep'
         self.name = name
         self.tags = tags
@@ -60,16 +69,61 @@ class RegressionStep(object):
         # - Figure out what we can infer about requirements for the underlying data, and
         #   write an 'orca_test' assertion to confirm compliance.
 
-        self.model = RegressionModel(model_expression=model_expression,
-                fit_filters=fit_filters, predict_filters=predict_filters,
-                ytransform=ytransform, name=name)
-
     
+    @classmethod
+    def from_dict(cls, d):
+        """
+        Create a RegressionStep object from a saved dictionary representation. This 
+        version of the object can run() but cannot be fit() again.
+        
+        Parameters
+        ----------
+        d : dict
+        
+        Returns
+        -------
+        RegressionStep
+        
+        """
+        rs = cls(d['model_expression'], d['tables'], out_fname=d['out_fname'], 
+                name=d['name'], tags=d['tags'])
+        rs.type = d['type']
+        
+        model_config = yamlio.convert_to_yaml(d['model'], None)
+        rs.model = RegressionModel.from_yaml(model_config)
+        
+        return rs
+        
+    
+    def to_dict(self):
+        """
+        Create a dictionary representation of the object, for input/output.
+        
+        Returns
+        -------
+        dictionary
+        
+        """
+        d = {
+            'type': self.type,
+            'name': self.name,
+            'tags': self.tags,
+            'model_expression': self.model_expression,
+            'tables': self.tables,
+            'out_fname': self.out_fname,
+            'model': self.model.to_dict()
+        }
+        return d
+        
+        
     def get_data(self):
         """
-        Generate a DataFrame from Orca table and column names. The results should not be
-        stored, in case the data in Orca changes between when the class is initialized 
-        and when fit() or run() is invoked.
+        Generate a data table for estimation or prediction, from Orca table and column
+        names. The results should not be stored, in case the data in Orca changes.
+        
+        Returns
+        -------
+        DataFrame
         
         """
         # TO DO: handle single table as well as list
@@ -84,6 +138,10 @@ class RegressionStep(object):
         Estimate the model and report results.
         
         """
+        self.model = RegressionModel(model_expression=self.model_expression,
+                fit_filters=self.fit_filters, predict_filters=self.predict_filters,
+                ytransform=self.ytransform, name=self.name)
+
         results = self.model.fit(self.get_data())
         print(results.summary())
         
@@ -99,11 +157,25 @@ class RegressionStep(object):
         # - If no destination column was specified, use name of dependent variable
 
         values = self.model.predict(self.get_data())
-        print(len(values))
+        print("Predicted " + str(len(values)) + " values")
         
         dfw = orca.get_table(self.tables[0])
         dfw.update_col_from_series(self.out_fname, values, cast=True)
         
+    
+    @classmethod
+    def run_from_dict(cls, d):
+        """
+        Create and run a RegressionStep from a saved dictionary representation.
+        
+        Parameters
+        ----------
+        d : dict
+        
+        """
+        rs = cls.from_dict(d)
+        rs.run()
+      
     
     def register(self):
         """
@@ -111,4 +183,10 @@ class RegressionStep(object):
         to disk so it will be automatically loaded in the future. 
         
         """
-        None
+        d = self.to_dict()
+        orca.add_step(self.name, RegressionStep.run_from_dict(d))
+        
+        
+        
+        
+        
