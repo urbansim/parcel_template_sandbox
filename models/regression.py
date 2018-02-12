@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import numpy as np
 import pandas as pd
 from datetime import datetime as dt
@@ -5,6 +7,8 @@ from datetime import datetime as dt
 import orca
 from urbansim.models import RegressionModel
 from urbansim.utils import yamlio
+
+from extensions import modelmanager as mm
 
 
 class RegressionStep(object):
@@ -53,15 +57,17 @@ class RegressionStep(object):
         self.predict_filters = predict_filters
         self.ytransform = ytransform
 
-        # Placeholder for the RegressionModel object, created either in the fit() method
-        # or in the from_dict() class method
+        # Placeholder for the RegressionModel object, which will be created either in the 
+        # fit() method or in the from_dict() class method
         self.model = None
         
         self.type = 'RegressionStep'
         self.name = name
         self.tags = tags
         
-        # Generate a name if none provided
+        # Generate a name if none provided - TO DO: maybe this should be the time of 
+        # model fitting rather than the time the object is created, in order to be 
+        # consistent with the regression results that print?
         if (self.name == None):
             self.name = self.type + '-' + dt.now().strftime('%Y%m%d-%H%M%S')
     
@@ -73,8 +79,8 @@ class RegressionStep(object):
     @classmethod
     def from_dict(cls, d):
         """
-        Create a RegressionStep object from a saved dictionary representation. This 
-        version of the object can run() but cannot be fit() again.
+        Create a RegressionStep object from a saved dictionary representation. (The  
+        resulting object can run() but cannot be fit() again.)
         
         Parameters
         ----------
@@ -89,6 +95,7 @@ class RegressionStep(object):
                 name=d['name'], tags=d['tags'])
         rs.type = d['type']
         
+        # Unpack the urbansim.models.RegressionModel() sub-object and resuscitate it
         model_config = yamlio.convert_to_yaml(d['model'], None)
         rs.model = RegressionModel.from_yaml(model_config)
         
@@ -111,7 +118,7 @@ class RegressionStep(object):
             'model_expression': self.model_expression,
             'tables': self.tables,
             'out_fname': self.out_fname,
-            'model': self.model.to_dict()
+            'model': self.model.to_dict()  # urbansim.models.RegressionModel() sub-object
         }
         return d
         
@@ -135,7 +142,7 @@ class RegressionStep(object):
     
     def fit(self):
         """
-        Estimate the model and report results.
+        Fit the model; save and report results.
         
         """
         self.model = RegressionModel(model_expression=self.model_expression,
@@ -143,6 +150,8 @@ class RegressionStep(object):
                 ytransform=self.ytransform, name=self.name)
 
         results = self.model.fit(self.get_data())
+        
+        # TO DO: save the results table (as a string?) so we can display it again later
         print(results.summary())
         
         
@@ -184,12 +193,7 @@ class RegressionStep(object):
         
         """
         d = self.to_dict()
-        
-        # Create a named callable for the model step, and register it with Orca
-        def run_rs():
-            return RegressionStep.run_from_dict(d)
-        
-        orca.add_step(self.name, run_rs)
+        mm.add_step(d)
         
         
         
