@@ -184,7 +184,12 @@ class RegressionStep(object):
         
         """
         d = self.to_dict()
-        orca.add_step(self.name, RegressionStep.run_from_dict(d))
+        
+        # Create a named callable for the model step, and register it with Orca
+        def run_rs():
+            return RegressionStep.run_from_dict(d)
+        
+        orca.add_step(self.name, run_rs)
         
         
         
