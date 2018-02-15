@@ -20,7 +20,7 @@ def build_networks(parcels, net_store):
 
 @orca.step('neighborhood_vars')
 def neighborhood_vars(net):
-    nodes = networks.from_yaml(net, "neighborhood_vars.yaml")
+    nodes = networks.from_yaml(net, "legacy_neighborhood_vars.yaml")
     nodes = nodes.fillna(0)
     print(nodes.describe())
     orca.add_table("nodes", nodes)

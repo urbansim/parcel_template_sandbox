@@ -14,7 +14,7 @@ from urbansim.utils import misc
 
 @orca.injectable('settings', cache=True)
 def settings():
-    with open(os.path.join(misc.configs_dir(), "settings.yaml")) as f:
+    with open(os.path.join(misc.configs_dir(), "legacy_settings.yaml")) as f:
         settings = yaml.load(f)
         orca.settings = settings
         return settings
