@@ -1,4 +1,4 @@
-test-2:
+RegressionStep-20180214-210159:
     model:
         fit_filters: null
         fit_parameters:
@@ -32,12 +32,12 @@ test-2:
         model_expression: np.log1p(res_price_per_sqft) ~ parcel_acres + year_built
             + ave_income + distance_to_freeway + population_400m + jobs_3000m
         model_type: regression
-        name: RegressionStep-20180211-220919
+        name: RegressionStep-20180214-210159
         predict_filters: null
         ytransform: np.exp
     model_expression: np.log1p(res_price_per_sqft) ~ parcel_acres + year_built + ave_income
         + distance_to_freeway + population_400m + jobs_3000m
-    name: test-2
+    name: RegressionStep-20180214-210159
     out_fname: fitted_price
     tables:
     - buildings
@@ -89,6 +89,57 @@ test-1:
     model_expression: np.log1p(res_price_per_sqft) ~ parcel_acres + year_built + ave_income
         + distance_to_freeway + population_400m + jobs_3000m
     name: test-1
+    out_fname: fitted_price
+    tables:
+    - buildings
+    - parcels
+    - nodes
+    tags:
+    - residential-price-hedonic
+    - sam
+    - '201802'
+    type: RegressionStep
+
+test-2:
+    model:
+        fit_filters: null
+        fit_parameters:
+            Coefficient:
+                Intercept: 40.09871283035528
+                ave_income: 0.23072273780443825
+                distance_to_freeway: 1.7180369445701138e-05
+                jobs_3000m: 0.0052401490489375055
+                parcel_acres: -1.3332502420922587
+                population_400m: -0.32329211786063883
+                year_built: -0.01829513014570837
+            Std. Error:
+                Intercept: 1.4425492135860816
+                ave_income: 0.059241099415382255
+                distance_to_freeway: 1.3879035363021292e-05
+                jobs_3000m: 0.0023354199740452226
+                parcel_acres: 0.06486249313570111
+                population_400m: 0.020305866818345758
+                year_built: 0.0006713350100920479
+            T-Score:
+                Intercept: 27.79711946927103
+                ave_income: 3.894639702526012
+                distance_to_freeway: 1.2378648080597718
+                jobs_3000m: 2.243771615886692
+                parcel_acres: -20.55502614281136
+                population_400m: -15.921118795507603
+                year_built: -27.251863630946183
+        fit_rsquared: 0.4805086622299135
+        fit_rsquared_adj: 0.4790755826774442
+        fitted: true
+        model_expression: np.log1p(res_price_per_sqft) ~ parcel_acres + year_built
+            + ave_income + distance_to_freeway + population_400m + jobs_3000m
+        model_type: regression
+        name: RegressionStep-20180211-220919
+        predict_filters: null
+        ytransform: np.exp
+    model_expression: np.log1p(res_price_per_sqft) ~ parcel_acres + year_built + ave_income
+        + distance_to_freeway + population_400m + jobs_3000m
+    name: test-2
     out_fname: fitted_price
     tables:
     - buildings
