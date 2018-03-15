@@ -1,4 +1,45 @@
-RegressionStep-20180214-210159:
+null:
+    filters:
+    - age_of_head < 40
+    fitted_parameters:
+    - -5.111984721917692
+    - 0.12937080499546547
+    - -7.380928627907898e-06
+    - 0.386911210479455
+    - -5.0005270183615935e-06
+    model_expression: children ~ age_of_head + income + cars + residential_sqft
+    name: null
+    out_column: null
+    out_tables: null
+    out_transform: null
+    out_value_false: nothing
+    out_value_true: -1
+    summary_table: "                           Logit Regression Results          \
+        \                 \n==============================================================================\n\
+        Dep. Variable:               children   No. Observations:                \
+        \ 4776\nModel:                          Logit   Df Residuals:            \
+        \         4771\nMethod:                           MLE   Df Model:        \
+        \                    4\nDate:                Wed, 14 Mar 2018   Pseudo R-squ.:\
+        \                 0.08767\nTime:                        21:09:30   Log-Likelihood:\
+        \                -2393.6\nconverged:                       True   LL-Null:\
+        \                       -2623.6\n                                        LLR\
+        \ p-value:                 2.927e-98\n====================================================================================\n\
+        \                       coef    std err          z      P>|z|      [0.025\
+        \      0.975]\n------------------------------------------------------------------------------------\n\
+        Intercept           -5.1120      0.250    -20.478      0.000      -5.601 \
+        \     -4.623\nage_of_head          0.1294      0.008     16.962      0.000\
+        \       0.114       0.144\nincome           -7.381e-06      1e-06     -7.354\
+        \      0.000   -9.35e-06   -5.41e-06\ncars                 0.3869      0.049\
+        \      7.923      0.000       0.291       0.483\nresidential_sqft -5.001e-06\
+        \   8.33e-07     -6.006      0.000   -6.63e-06   -3.37e-06\n===================================================================================="
+    tables:
+    - households
+    - buildings
+    - parcels
+    tags: null
+    type: BinaryLogitStep
+
+test-2:
     model:
         fit_filters: null
         fit_parameters:
@@ -32,12 +73,12 @@ RegressionStep-20180214-210159:
         model_expression: np.log1p(res_price_per_sqft) ~ parcel_acres + year_built
             + ave_income + distance_to_freeway + population_400m + jobs_3000m
         model_type: regression
-        name: RegressionStep-20180214-210159
+        name: RegressionStep-20180211-220919
         predict_filters: null
         ytransform: np.exp
     model_expression: np.log1p(res_price_per_sqft) ~ parcel_acres + year_built + ave_income
         + distance_to_freeway + population_400m + jobs_3000m
-    name: RegressionStep-20180214-210159
+    name: test-2
     out_fname: fitted_price
     tables:
     - buildings
@@ -100,7 +141,7 @@ test-1:
     - '201802'
     type: RegressionStep
 
-test-2:
+RegressionStep-20180214-210159:
     model:
         fit_filters: null
         fit_parameters:
@@ -134,12 +175,12 @@ test-2:
         model_expression: np.log1p(res_price_per_sqft) ~ parcel_acres + year_built
             + ave_income + distance_to_freeway + population_400m + jobs_3000m
         model_type: regression
-        name: RegressionStep-20180211-220919
+        name: RegressionStep-20180214-210159
         predict_filters: null
         ytransform: np.exp
     model_expression: np.log1p(res_price_per_sqft) ~ parcel_acres + year_built + ave_income
         + distance_to_freeway + population_400m + jobs_3000m
-    name: test-2
+    name: RegressionStep-20180214-210159
     out_fname: fitted_price
     tables:
     - buildings
@@ -150,3 +191,44 @@ test-2:
     - sam
     - '201802'
     type: RegressionStep
+
+BinaryLogitStep-20180314-211201:
+    filters:
+    - age_of_head < 40
+    fitted_parameters:
+    - -5.111984721917692
+    - 0.12937080499546547
+    - -7.380928627907898e-06
+    - 0.386911210479455
+    - -5.0005270183615935e-06
+    model_expression: children ~ age_of_head + income + cars + residential_sqft
+    name: BinaryLogitStep-20180314-211201
+    out_column: null
+    out_tables: null
+    out_transform: null
+    out_value_false: nothing
+    out_value_true: -1
+    summary_table: "                           Logit Regression Results          \
+        \                 \n==============================================================================\n\
+        Dep. Variable:               children   No. Observations:                \
+        \ 4776\nModel:                          Logit   Df Residuals:            \
+        \         4771\nMethod:                           MLE   Df Model:        \
+        \                    4\nDate:                Wed, 14 Mar 2018   Pseudo R-squ.:\
+        \                 0.08767\nTime:                        21:12:01   Log-Likelihood:\
+        \                -2393.6\nconverged:                       True   LL-Null:\
+        \                       -2623.6\n                                        LLR\
+        \ p-value:                 2.927e-98\n====================================================================================\n\
+        \                       coef    std err          z      P>|z|      [0.025\
+        \      0.975]\n------------------------------------------------------------------------------------\n\
+        Intercept           -5.1120      0.250    -20.478      0.000      -5.601 \
+        \     -4.623\nage_of_head          0.1294      0.008     16.962      0.000\
+        \       0.114       0.144\nincome           -7.381e-06      1e-06     -7.354\
+        \      0.000   -9.35e-06   -5.41e-06\ncars                 0.3869      0.049\
+        \      7.923      0.000       0.291       0.483\nresidential_sqft -5.001e-06\
+        \   8.33e-07     -6.006      0.000   -6.63e-06   -3.37e-06\n===================================================================================="
+    tables:
+    - households
+    - buildings
+    - parcels
+    tags: null
+    type: BinaryLogitStep
