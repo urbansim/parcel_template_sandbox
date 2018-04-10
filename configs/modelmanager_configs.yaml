@@ -273,3 +273,48 @@ BinaryLogitStep-20180314-213137:
     - parcels
     tags: null
     type: BinaryLogitStep
+
+hlcm1:
+    alternatives:
+    - buildings
+    - nodes
+    choosers: households
+    model:
+        alts_fit_filters: null
+        alts_predict_filters: null
+        choice_column: null
+        choice_mode: individual
+        choosers_fit_filters: null
+        choosers_predict_filters: null
+        estimation_sample_size: null
+        fit_parameters:
+            Coefficient:
+                jobs_1500m: 0.34581936115720685
+                res_price_per_sqft: -0.007174190659138939
+            Std. Error:
+                jobs_1500m: 0.008172372255171383
+                res_price_per_sqft: 6.617589518178617e-05
+            T-Score:
+                jobs_1500m: 42.3156643333735
+                res_price_per_sqft: -108.41093481895984
+        fitted: true
+        interaction_predict_filters: null
+        log_likelihoods:
+            convergence: -34575.48735554272
+            'null': -39898.7226323586
+            ratio: 0.13341868926146117
+        model_expression: res_price_per_sqft + jobs_1500m
+        model_type: discretechoice
+        name: hlcm1
+        prediction_sample_size: null
+        probability_mode: full_product
+        sample_size: 50
+    model_expression: res_price_per_sqft + jobs_1500m
+    name: hlcm1
+    out_fname: fitted_hlcm
+    sample_size: 50
+    tags:
+    - hlcm
+    - max
+    - '201802'
+    type: MNLDiscreteChoiceStep
