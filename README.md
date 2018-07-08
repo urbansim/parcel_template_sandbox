@@ -1,5 +1,9 @@
 # parcel_template_sandbox
 
+### This repo was the original testbed for template-based model steps, but development has moved to [ual/urbansim_parcel_bayarea](https://github.com/ual/urbansim_parcel_bayarea). The notebooks in this repo no longer run.
+
+-----
+
 Owner: Sam Maurer
 
 This repository is a testbed for parcel template development. The main content is this notebook:
